@@ -3,6 +3,7 @@
 http://codekata.com/kata/kata14-tom-swift-under-the-milkwood/
 """
 from collections import defaultdict
+import random
 
 
 def read_trigrams(text):
@@ -34,9 +35,32 @@ def _same_order(trigram):
         seed = [seed[-1], value]
 
 
-def compose_text(trigram, algorithm=_same_order):
+def _random(trigram):
+    """Compose a trigram in the random order."""
+    keys = [k for k in trigram.keys()]  # keys are ordered since 3.6
+    seed = [*random.choice(keys)]
+
+    yield from (item for item in seed)
+
+    while any(v for v in trigram.values()):
+        key = (seed[-2], seed[-1])
+        upper_bound = len(trigram[key])
+        if upper_bound < 1:
+            break
+        elif upper_bound == 1:
+            index = 0
+        else:
+            index = random.randint(0, upper_bound - 1)
+
+        value = trigram[key].pop(index)
+        yield value
+        seed = [seed[-1], value]
+
+
+def compose_text(trigram, algorithm=_random):
     """Compose text given a trigram."""
     items = [i for i in algorithm(trigram)]
+
     return " ".join(items)
 
 
