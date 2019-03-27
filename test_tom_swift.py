@@ -1,7 +1,7 @@
 """Tests for tom_swift.py."""
 import pytest
 
-from tom_swift import main
+import tom_swift
 
 
 @pytest.mark.parametrize("text,expected", [
@@ -15,6 +15,6 @@ from tom_swift import main
         },
     )
 ])
-def test_main(text, expected):
-    """Assert main() reads the proper trigram."""
-    assert main(text) == expected
+def test_read_trigrams(text, expected):
+    """Assert read_trigrams(text) reads the proper trigram."""
+    assert tom_swift.read_trigrams(text) == expected
